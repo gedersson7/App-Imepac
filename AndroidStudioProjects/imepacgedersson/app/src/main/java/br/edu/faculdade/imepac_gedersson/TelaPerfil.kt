@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot // Importação para o casting
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 class TelaPerfil : AppCompatActivity() {
@@ -30,7 +30,6 @@ class TelaPerfil : AppCompatActivity() {
         IniciarComponentes()
         db = FirebaseFirestore.getInstance()
 
-        // 🔥 NOVO: Chamando a função "Brinde" do professor
         fetchAllNames()
 
         bt_sair.setOnClickListener {
@@ -65,7 +64,6 @@ class TelaPerfil : AppCompatActivity() {
         query.get()
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
-                    // Mantivemos a correção segura que fizemos antes!
                     val documento = querySnapshot.documents.first() as DocumentSnapshot
                     val nome = documento.getString("nome")
 
@@ -89,10 +87,8 @@ class TelaPerfil : AppCompatActivity() {
         bt_sair = findViewById(R.id.bt_sair)
     }
 
-    // 🔥 NOVO: A função "Brinde" adicionada ao final do arquivo
     private fun fetchAllNames() {
         val db = FirebaseFirestore.getInstance()
-        // Corrigido para "Usuarios" (U maiúsculo) para bater com seu banco!
         val usuariosRef = db.collection("Usuarios")
 
         usuariosRef.get().addOnSuccessListener { querySnapshot ->

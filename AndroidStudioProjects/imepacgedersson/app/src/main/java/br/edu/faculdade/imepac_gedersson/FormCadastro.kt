@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore // 🔥 IMPORTANTE: Importação do Firestore
+import com.google.firebase.firestore.FirebaseFirestore
 
 class FormCadastro : AppCompatActivity() {
 
@@ -26,14 +26,13 @@ class FormCadastro : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_form_cadastro)
 
-        // Inicializa o Firebase
         FirebaseApp.initializeApp(this)
 
         supportActionBar?.hide()
 
         edit_nome = findViewById(R.id.edit_nome)
-        edit_email = findViewById(R.id.edit_email_cadastro) // ID atualizado!
-        edit_senha = findViewById(R.id.edit_senha_cadastro) // ID atualizado!
+        edit_email = findViewById(R.id.edit_email_cadastro)
+        edit_senha = findViewById(R.id.edit_senha_cadastro)
         bt_cadastrar = findViewById(R.id.bt_cadastrar)
 
         bt_cadastrar.setOnClickListener { view ->
@@ -63,14 +62,12 @@ class FormCadastro : AppCompatActivity() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
 
-                    // 🔥 Chamando a função para salvar no Firestore igual ao Slide 2
                     salvarDadosUsuario()
 
                     Snackbar.make(view, "Cadastro realizado com sucesso", Snackbar.LENGTH_LONG).show()
 
-                    // 🔥 NOVO: Aguarda 1.5 segundos e volta para a tela de Login
                     android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
-                        finish() // Finaliza a tela atual e revela a anterior
+                        finish()
                     }, 1500)
 
                 } else {
@@ -83,24 +80,20 @@ class FormCadastro : AppCompatActivity() {
             }
     }
 
-    // SLIDE 3: Função para salvar os dados adicionais no banco de dados
     private fun salvarDadosUsuario() {
         val db = FirebaseFirestore.getInstance()
         val nome = edit_nome.text.toString().trim()
 
-        // Pega o ID e o Email do usuário que acabou de ser logado/criado
         val usuarioID = FirebaseAuth.getInstance().currentUser?.uid
         val email = FirebaseAuth.getInstance().currentUser?.email
 
         if (usuarioID != null && email != null) {
-            // Organiza os dados em um mapa (chave e valor)
             val usuarios = hashMapOf(
                 "nome" to nome,
                 "email" to email,
                 "uid" to usuarioID
             )
 
-            // Salva na coleção "Usuarios" do Firestore
             db.collection("Usuarios")
                 .add(usuarios)
                 .addOnSuccessListener { documentReference ->
@@ -114,7 +107,6 @@ class FormCadastro : AppCompatActivity() {
         }
     }
 
-    // 🔥 FUNÇÃO ADICIONADA AQUI: Esconde o teclado ao tocar fora do campo de texto
     override fun dispatchTouchEvent(event: android.view.MotionEvent): Boolean {
         if (event.action == android.view.MotionEvent.ACTION_DOWN) {
             val v = currentFocus

@@ -65,16 +65,14 @@ class FormLogin : AppCompatActivity() {
 
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, senha).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                // Autenticação bem-sucedida
                 progressbar.visibility = View.GONE
 
-                // 🔥 AQUI ESTÁ A MUDANÇA: Navegando para a Tela Principal
                 val intent = Intent(this@FormLogin, TelaPerfil::class.java)
                 startActivity(intent)
-                finish() // Finaliza a atividade atual para que o usuário não possa voltar para ela
+                finish()
 
             } else {
-                // Autenticação falhou
+
                 progressbar.visibility = View.GONE
                 val mensagemErro = task.exception?.message
                 Snackbar.make(
@@ -93,7 +91,6 @@ class FormLogin : AppCompatActivity() {
         progressbar = findViewById(R.id.progressbar)
     }
 
-    // 🔥 FUNÇÃO ADICIONADA AQUI: Esconde o teclado ao tocar fora do campo de texto
     override fun dispatchTouchEvent(event: android.view.MotionEvent): Boolean {
         if (event.action == android.view.MotionEvent.ACTION_DOWN) {
             val v = currentFocus
